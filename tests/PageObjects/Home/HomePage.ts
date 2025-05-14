@@ -16,7 +16,6 @@ export class HomePage {
         this.logoutTab = page.getByRole('link', { name: 'Salir del Módulo' })
         this.changePasswordTab = page.getByRole('link', { name: 'Cambio de Clave' });
         this.administrativeModuleTab = page.getByRole('link', { name: 'Módulos Administrativos»' })
-
     }
 
     //funciones de los elementos
