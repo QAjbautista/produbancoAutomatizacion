@@ -5,15 +5,17 @@ export class HomePage {
 
     readonly page: Page;
     readonly usersTab: Locator;
-    readonly logOut: Locator;
-    readonly changePassword: Locator;
+    readonly logoutTab: Locator;
+    readonly changePasswordTab: Locator;
+    readonly administrativeModuleTab: Locator
 
     constructor(page: Page) {
         //Webelements de la pagina
         this.page = page;
         this.usersTab = page.getByRole('link', { name: 'Usuarios' }).nth(2)
-        this.logOut = page.getByRole('link', { name: 'Salir del Módulo' })
-        this.changePassword = page.getByRole('link', { name: 'Cambio de Clave' });
+        this.logoutTab = page.getByRole('link', { name: 'Salir del Módulo' })
+        this.changePasswordTab = page.getByRole('link', { name: 'Cambio de Clave' });
+        this.administrativeModuleTab = page.getByRole('link', { name: 'Módulos Administrativos»' })
 
     }
 
@@ -23,11 +25,11 @@ export class HomePage {
     }
 
     async clickOnLogoutButton() {
-        await this.logOut.click();
+        await this.logoutTab.click();
     }
 
     async clickOnChangePassword() {
-        await this.changePassword.click();
+        await this.changePasswordTab.click();
     }
 }
 
