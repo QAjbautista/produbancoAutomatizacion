@@ -1,0 +1,77 @@
+import { expect, type Locator, type Page } from '@playwright/test';
+
+export class ChangePasswordPage {
+    //Nombre de los locators
+    readonly page: Page;
+    static CHANGEPASSWORD_URL = 'https://tomcat-t-ecuador-server.novopayment.net/admnovoWebProd/cambioClave.do';
+    readonly currentPassword: Locator;
+    readonly newPassword: Locator;
+    readonly confirmNewPassword: Locator;
+    readonly acceptButton: Locator;
+    readonly backButton: Locator;
+    readonly confirmChangePassword: Locator;
+    readonly invalidCurrentPasswordMessage: Locator;
+
+    constructor(page: Page) {
+        //Webelements de la pagina
+        this.page = page;
+        this.currentPassword = page.locator('#curpw');
+        this.newPassword = page.locator('#newpw');
+        this.confirmNewPassword = page.locator('#newpwcf');
+        this.acceptButton = page.getByRole('button', { name: 'Aceptar' })
+        this.backButton = page.getByRole('button', { name: 'Atrás' });
+        this.confirmChangePassword = page.getByRole('button', { name: 'SI' })
+    }
+
+    //funciones de los elementos
+    async setCurrentPassword(currentPassword: string) {
+        await this.currentPassword.fill(currentPassword);
+    }
+
+    async setNewPassword(newPassword: string) {
+        await this.newPassword.fill(newPassword);
+    }
+
+    async setConfirmNewPassword(confirmNewPassword: string) {
+        await this.confirmNewPassword.fill(confirmNewPassword);
+    }
+
+    async clickAcceptButton() {
+        await this.acceptButton.click();
+    }
+
+    async clickBackButton() {
+        await this.backButton.click();
+    }
+
+    async clickConfrimChangePassword() {
+        await this.confirmChangePassword.click()
+    }
+
+    async validateInvalidCurrentPasswordMessage(message: string) {
+        await expect(this.page.getByText(message)).toBeVisible();
+    }
+
+    async validatepopup() {
+        this.page.on("dialog", async (dialog) => {
+            console.log(`Mensaje del popup: ${dialog.message()}`);
+            await dialog.accept(); // O dialog.dismiss() si quieres rechazarlo
+        });
+    }
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
