@@ -8,6 +8,8 @@ export class HomePage {
     readonly logoutTab: Locator;
     readonly changePasswordTab: Locator;
     readonly administrativeModuleTab: Locator
+    readonly maintenanceTab: Locator
+    readonly maintenanceUsersTab: Locator
 
     constructor(page: Page) {
         //Webelements de la pagina
@@ -15,7 +17,10 @@ export class HomePage {
         this.usersTab = page.getByRole('link', { name: 'Usuarios' }).nth(2)
         this.logoutTab = page.getByRole('link', { name: 'Salir del Módulo' })
         this.changePasswordTab = page.getByRole('link', { name: 'Cambio de Clave' });
-        this.administrativeModuleTab = page.getByRole('link', { name: 'Módulos Administrativos»' })
+        this.maintenanceTab = page.locator('a').filter({ hasText: /^Mantenimiento$/ })
+        this.maintenanceUsersTab = page.getByText('Usuarios Empresas Online Mó') //validar este locator mañana
+        this.administrativeModuleTab = page.getByRole('link', { name: 'Módulos Administrativos' })
+
     }
 
     //funciones de los elementos
@@ -29,6 +34,18 @@ export class HomePage {
 
     async clickOnChangePassword() {
         await this.changePasswordTab.click();
+    }
+
+    async clickOnMaintenanceTab() {
+        await this.maintenanceTab.click();
+    }
+
+    async clickOnMaintenanceUsersTab() {
+        await this.maintenanceUsersTab.hover();
+    }
+
+    async clickOnAdministrativeModule() {
+        await this.administrativeModuleTab.click();
     }
 }
 

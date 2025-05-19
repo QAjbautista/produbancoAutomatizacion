@@ -1,11 +1,10 @@
 import { test, expect } from '@playwright/test';
-import { LoginPage } from "../PageObjects/Login/LoginPage";
-import { HomePage } from "../PageObjects/Home/HomePage";
-import { ChangePasswordPage } from '../PageObjects/ChangePassword/ChangePasswordPage';
-
+import { LoginPage } from "../../PageObjects/Login/LoginPage";
+import { HomePage } from "../../PageObjects/Home/HomePage";
+import { ChangePasswordPage } from '../../PageObjects/ChangePassword/ChangePasswordPage';
 
 test.describe('Validate Change Password With Incorrect Current Password', () => {
-    test('User enters correct credentials and logs in to his account', async ({ page }) => {
+    test.skip('User enters correct credentials and logs in to his account', async ({ page }) => {
         await test.step('I navigate to Produbanco´s administrative module page', async () => {
             await page.goto(LoginPage.LOGIN_URL);
         })

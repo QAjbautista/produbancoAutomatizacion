@@ -52,12 +52,13 @@ export class ChangePasswordPage {
         await expect(this.page.getByText(message)).toBeVisible();
     }
 
-    async validatepopup() {
-        this.page.on("dialog", async (dialog) => {
-            console.log(`Mensaje del popup: ${dialog.message()}`);
-            await dialog.accept(); // O dialog.dismiss() si quieres rechazarlo
-        });
+    async validateAcceptButtonDisabled() {
+        await expect(this.acceptButton).toBeDisabled();
     }
+
+
+
+
 
 
 

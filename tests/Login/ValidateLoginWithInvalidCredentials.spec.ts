@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { LoginPage } from "../PageObjects/Login/LoginPage";
+import { LoginPage } from "../../PageObjects/Login/LoginPage";
 
 
 test.describe('Validate invalid credentials', () => {
