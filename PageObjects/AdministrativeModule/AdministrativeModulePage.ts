@@ -1,4 +1,4 @@
-import { type Locator, type Page, expect } from "@playwright/test";
+import test, { type Locator, type Page, expect } from "@playwright/test";
 
 export class AdministrativeModulePage {
     readonly page: Page;
@@ -31,9 +31,12 @@ export class AdministrativeModulePage {
     readonly deleteUserButton: Locator;
     readonly resetPasswordUserButton: Locator;
     readonly successfulUserCreationMessage: Locator;
-    readonly sucessfulUserDeletionMessage: Locator;
-
-
+    readonly successfulUserDeletionMessage: Locator;
+    readonly invalidPasswordMessage: Locator;
+    readonly correctButton: Locator
+    readonly emptyConfirmationPasswordMessage: Locator;
+    readonly existingUserMessage: Locator;
+    readonly existingIdentificationMessage: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -65,7 +68,12 @@ export class AdministrativeModulePage {
         this.deleteUserButton = page.locator("input[type = 'button'][value = 'E']")
         this.resetPasswordUserButton = page.locator("input[type = 'button'][value = 'R']")
         this.successfulUserCreationMessage = page.getByText('tu transacci?n ha sido') //tu transacci?n ha sido procesada exitosamente.
-        this.sucessfulUserDeletionMessage = page.getByText('usuario: ANONIMO02 eliminado exitosamente.')
+        this.successfulUserDeletionMessage = page.getByText('usuario: ANONIMO02 eliminado exitosamente.')
+        this.invalidPasswordMessage = page.getByText('La contrase&ntilde;a')
+        this.correctButton = page.getByRole('button', { name: 'Corregir' })
+        this.emptyConfirmationPasswordMessage = page.getByText('Debe ingresar su clave de') //Debe ingresar su clave de confirmación primero. 
+        this.existingUserMessage = page.getByText('ya existe un usuario') //ya existe un usuario registrado con el mismo nombre: ANONIMO01.
+        this.existingIdentificationMessage = page.getByText('el nro. de identificaci�n') // el nro. de identificaci�n 1103646335. Ya se encuentra registrado
     }
 
     async searchUser(username: string) {
@@ -153,23 +161,54 @@ export class AdministrativeModulePage {
     }
 
     async validateSuccessfulUserDeletionMessage(message: string) {
-        await expect(this.sucessfulUserDeletionMessage).toHaveText(message);
+        await expect(this.successfulUserDeletionMessage).toHaveText(message);
     }
 
+    async validateInvalidPasswordMessage(message: string) {
+        await expect(this.invalidPasswordMessage).toHaveText(message);
+    }
 
+    async clickOnCorrectButton() {
+        await this.correctButton.click();
+    }
 
+    async validateEmptyConfirmationPasswordMessage(message: string) {
+        await expect(this.emptyConfirmationPasswordMessage).toHaveText(message);
+    }
 
+    async validateTableRow(expectedValues) {
+        for (const value of expectedValues) {
+            const locator = `//td[normalize-space()="${value}"]`;
+            await expect(this.page.locator(locator)).toBeVisible();
+        }
+    }
 
+    async validateExistingUserMessage(message: string) {
+        await expect(this.existingUserMessage).toHaveText(message);
+    }
 
+    async validateExistingIdentificationMessage(message: string) {
+        await expect(this.existingIdentificationMessage).toHaveText(message);
+    }
 
+    async clickOnCleanCreationButton() {
+        await this.cleanCreationButton.click();
+    }
 
-
-
-
-
-
-
+    async validateEmptyFormFields() {
+        await expect(this.username).toBeEmpty();
+        await expect(this.firstname).toBeEmpty();
+        await expect(this.middlename).toBeEmpty();
+        await expect(this.lastname).toBeEmpty();
+        await expect(this.secondLastname).toBeEmpty();
+        await expect(this.status).toHaveValue('');
+        await expect(this.operationalRole).toHaveValue('');
+        await expect(this.transmitter).toHaveValue('');
+        await expect(this.charge).toBeEmpty();
+        await expect(this.identificationType).toHaveValue('');
+        await expect(this.identificationNumber).toBeEmpty();
+        await expect(this.email).toBeEmpty();
+        await expect(this.phoneNumber).toBeEmpty();
+        await expect(this.positionArea).toBeEmpty();
+    }
 }
-
-
-
