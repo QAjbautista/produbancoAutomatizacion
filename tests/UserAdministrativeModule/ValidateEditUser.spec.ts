@@ -27,7 +27,7 @@ test.describe('Validate response when editing a user', () => {
         await expect(page).toHaveURL(LoginPage.LOGIN_URL);
     });
 
-    test('User search a user and cleans the form', async ({ page }) => {
+    test('User search a user and edit the information', async ({ page }) => {
         await homePage.clickOnMaintenanceTab();
         await homePage.clickOnMaintenanceUsersTab();
         await homePage.clickOnAdministrativeModule();
