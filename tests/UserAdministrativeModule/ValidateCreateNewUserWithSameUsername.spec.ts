@@ -4,7 +4,7 @@ import { HomePage } from "../../PageObjects/Home/HomePage";
 import { AdministrativeModulePage } from "../../PageObjects/AdministrativeModule/AdministrativeModulePage"
 
 test.describe('Validate response when trying to create with an already created user', () => {
-    test.only('User enters correct credentials and logs in to his account', async ({ page }) => {
+    test('User enters correct credentials and logs in to his account', async ({ page }) => {
         await test.step('I navigate to Produbanco´s administrative module page', async () => {
             await page.goto(LoginPage.LOGIN_URL);
         })

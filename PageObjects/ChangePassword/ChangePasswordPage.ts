@@ -3,6 +3,9 @@ import { expect, type Locator, type Page } from '@playwright/test';
 export class ChangePasswordPage {
     //Nombre de los locators
     readonly page: Page;
+    static create(page: Page) {
+        return new ChangePasswordPage(page);
+    }
     static CHANGEPASSWORD_URL = 'https://tomcat-t-ecuador-server.novopayment.net/admnovoWebProd/cambioClave.do';
     readonly currentPassword: Locator;
     readonly newPassword: Locator;

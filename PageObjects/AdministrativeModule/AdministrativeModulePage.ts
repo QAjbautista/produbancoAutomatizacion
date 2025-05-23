@@ -2,6 +2,9 @@ import test, { type Locator, type Page, expect } from "@playwright/test";
 
 export class AdministrativeModulePage {
     readonly page: Page;
+    static create(page: Page) {
+        return new AdministrativeModulePage(page);
+    }
     static ADMINISTRATIVEMODULE_URL = 'https://tomcat-t-ecuador-server.novopayment.net/admnovoWebProd/admusuario.do'
     readonly searchUsername: Locator;
     readonly searchFirstnameAndLastname: Locator;
@@ -31,6 +34,7 @@ export class AdministrativeModulePage {
     readonly deleteUserButton: Locator;
     readonly resetPasswordUserButton: Locator;
     readonly successfulUserCreationMessage: Locator;
+    readonly successfulUserEditationMessage: Locator;
     readonly successfulUserDeletionMessage: Locator;
     readonly invalidPasswordMessage: Locator;
     readonly correctButton: Locator
@@ -68,6 +72,7 @@ export class AdministrativeModulePage {
         this.deleteUserButton = page.locator("input[type = 'button'][value = 'E']")
         this.resetPasswordUserButton = page.locator("input[type = 'button'][value = 'R']")
         this.successfulUserCreationMessage = page.getByText('tu transacci?n ha sido') //tu transacci?n ha sido procesada exitosamente.
+        this.successfulUserEditationMessage = page.getByText('tu transacci�n ha sido') //tu transacci�n ha sido procesada exitosamente.
         this.successfulUserDeletionMessage = page.getByText('usuario: ANONIMO02 eliminado exitosamente.')
         this.invalidPasswordMessage = page.getByText('La contrase&ntilde;a')
         this.correctButton = page.getByRole('button', { name: 'Corregir' })
@@ -156,6 +161,10 @@ export class AdministrativeModulePage {
         await expect(this.successfulUserCreationMessage).toHaveText(message);
     }
 
+    async validateSuccessfulUserEditationMessage(message: string) {
+        await expect(this.successfulUserEditationMessage).toHaveText(message);
+    }
+
     async clickOnDeleteUserButton() {
         await this.deleteUserButton.click();
     }
@@ -175,11 +184,11 @@ export class AdministrativeModulePage {
     async validateEmptyConfirmationPasswordMessage(message: string) {
         await expect(this.emptyConfirmationPasswordMessage).toHaveText(message);
     }
-
-    async validateTableRow(expectedValues) {
-        for (const value of expectedValues) {
-            const locator = `//td[normalize-space()="${value}"]`;
-            await expect(this.page.locator(locator)).toBeVisible();
+    async validateTableRow(expectedValues: string[]) {
+        for (let i = 0; i < expectedValues.length; i++) {
+            const cell = this.page.locator(`//*[@id="cxTable"]/tbody/tr/td[${i + 1}]`);
+            const cellText = (await cell.textContent())?.trim() || '';
+            expect(cellText).toBe(expectedValues[i]);
         }
     }
 
@@ -210,5 +219,13 @@ export class AdministrativeModulePage {
         await expect(this.email).toBeEmpty();
         await expect(this.phoneNumber).toBeEmpty();
         await expect(this.positionArea).toBeEmpty();
+    }
+
+    async clickOnEditUserButton() {
+        await this.editUserButton.click();
+    }
+
+    async clickOnUpdateButton() {
+        await this.updateButton.click();
     }
 }

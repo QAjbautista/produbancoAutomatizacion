@@ -4,6 +4,9 @@ export class HomePage {
     //Nombre de los locators
 
     readonly page: Page;
+    static create(page: Page) {
+        return new HomePage(page);
+    }
     readonly usersTab: Locator;
     readonly logoutTab: Locator;
     readonly changePasswordTab: Locator;

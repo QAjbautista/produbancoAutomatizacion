@@ -1,8 +1,11 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 
 export class LoginPage {
-    //Nombre de los locators
     readonly page: Page;
+    static create(page: Page) {
+        return new LoginPage(page);
+    }
+    //Nombre de los locators
     static LOGIN_URL =
         "https://tomcat-t-ecuador-server.novopayment.net/admnovoWebProd/loginSetup.do?trnid=login&opcion=3";
     static DASHBOARD_URL =
