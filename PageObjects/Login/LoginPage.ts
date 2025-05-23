@@ -5,7 +5,6 @@ export class LoginPage {
     static create(page: Page) {
         return new LoginPage(page);
     }
-    //Nombre de los locators
     static LOGIN_URL =
         "https://tomcat-t-ecuador-server.novopayment.net/admnovoWebProd/loginSetup.do?trnid=login&opcion=3";
     static DASHBOARD_URL =
@@ -17,7 +16,6 @@ export class LoginPage {
     readonly validateFieldColor: Locator;
 
     constructor(page: Page) {
-        //Webelements de la pagina
         this.page = page;
         this.usernameField = page.getByRole("textbox", { name: "Usuario" });
         this.passwordField = page.getByRole("textbox", { name: "Contraseña" });
@@ -25,7 +23,6 @@ export class LoginPage {
         this.cancelButton = page.getByRole("button", { name: "Cancelar" });
     }
 
-    //funciones de los elementos
     async inputUsername(username: string) {
         await this.usernameField.fill(username);
     }

@@ -1,26 +1,21 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import { LoginPage } from "../../PageObjects/Login/LoginPage";
+import users from '../../data/credentials.json';
 
+test.describe('Validate response when clearing the data entered in the form', () => {
+    let loginPage: LoginPage;
 
-test.describe('Validate cancel button credentials', () => {
-    test('User enters data in the fields and want clear the fields', async ({ page }) => {
-        await test.step('I navigate to Produbanco´s administrative module page', async () => {
-            await page.goto(LoginPage.LOGIN_URL);
-        })
-        await test.step('Enter valid username and password to log into the system.', async () => {
-            const loginPage = new LoginPage(page);
+    test.beforeEach(async ({ page }) => {
+        loginPage = LoginPage.create(page);
+        await page.goto('/admnovoWebProd/loginSetup.do?trnid=login&opcion=3');
+        await loginPage.inputUsername(users.admin1.username);
+        await loginPage.inputPassword(users.admin1.password);
+        await loginPage.clickCancelButton();
 
-            await loginPage.inputUsername('JBAU89');
-            await loginPage.inputPassword('TEST');
-            await loginPage.clickCancelButton();
-        })
+    });
 
-        await test.step('Validate empty fields', async () => {
-            const loginPage = new LoginPage(page);
-            await loginPage.validateEmptyUsernameField();
-            await loginPage.validateEmptyPasswordField();
-        });
-    })
+    test('Create the user and edit it', async () => {
+        await loginPage.validateEmptyUsernameField();
+        await loginPage.validateEmptyPasswordField();
+    });
 });
-
-

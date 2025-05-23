@@ -22,13 +22,6 @@ test.describe('Validate create new administrative user', () => {
     });
 
     test.afterEach(async ({ page }) => {
-        // Eliminar el usuario creado para limpiar el entorno
-        await administrativeModulePage.searchUser("anonimo02");
-        await administrativeModulePage.clickOnSearchButton();
-        await administrativeModulePage.inputConfirmationPassword('123');
-        await administrativeModulePage.clickOnDeleteUserButton();
-        await administrativeModulePage.clickConfirmCreationButton();
-        await administrativeModulePage.validateSuccessfulUserDeletionMessage('usuario: ANONIMO02 eliminado exitosamente.');
         // Cerrar sesión
         await homePage.clickOnUsersTab();
         await homePage.clickOnLogoutButton();
@@ -52,12 +45,32 @@ test.describe('Validate create new administrative user', () => {
         await administrativeModulePage.inputCharge('Analista Junior QA');
         await administrativeModulePage.selectIdentificationType('CC');
         await administrativeModulePage.inputIdentificationNumber('2087654329');
-        await administrativeModulePage.inputEmail('anonimo02@yopmail.com');
+        await administrativeModulePage.inputEmail('@yopmail.com');
         await administrativeModulePage.inputPositionArea('QA');
         await administrativeModulePage.inputPhoneNumber('0987654321');
-        await administrativeModulePage.inputConfirmationPassword('123');
         await administrativeModulePage.clickInsertButton();
-        await administrativeModulePage.clickConfirmCreationButton();
-        await administrativeModulePage.validateSuccessfulUserCreationMessage('tu transacci?n ha sido procesada exitosamente.');
+        await administrativeModulePage.validateInvalidEmailFormatMessage('Campo Email es inválido.')
+        await administrativeModulePage.clickOnCorrectButton();
+
+        await administrativeModulePage.inputEmail('anonimo02yopmail.com');
+        await administrativeModulePage.clickInsertButton();
+        await administrativeModulePage.validateInvalidEmailFormatMessage('Campo Email es inválido.')
+        await administrativeModulePage.clickOnCorrectButton();
+
+        await administrativeModulePage.inputEmail('anonimo02@.com');
+        await administrativeModulePage.clickInsertButton();
+        await administrativeModulePage.validateInvalidEmailFormatMessage('Campo Email es inválido.')
+        await administrativeModulePage.clickOnCorrectButton();
+
+        await administrativeModulePage.inputEmail('anonimo02@yopmailcom');
+        await administrativeModulePage.clickInsertButton();
+        await administrativeModulePage.validateInvalidEmailFormatMessage('Campo Email es inválido.')
+        await administrativeModulePage.clickOnCorrectButton();
+
+        await administrativeModulePage.inputEmail('anonimo02@yopmail.');
+        await administrativeModulePage.clickInsertButton();
+        await administrativeModulePage.validateInvalidEmailFormatMessage('Campo Email es inválido.')
+        await administrativeModulePage.clickOnCorrectButton();
+
     });
 });

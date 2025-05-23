@@ -5,7 +5,7 @@ export class AdministrativeModulePage {
     static create(page: Page) {
         return new AdministrativeModulePage(page);
     }
-    static ADMINISTRATIVEMODULE_URL = 'https://tomcat-t-ecuador-server.novopayment.net/admnovoWebProd/admusuario.do'
+    static ADMINISTRATIVEMODULE_URL = 'https://tomcat-t-ecuador-server.novopayment.net/admnovoWebProd/admusuario.do';
     readonly searchUsername: Locator;
     readonly searchFirstnameAndLastname: Locator;
     readonly emitter: Locator;
@@ -37,56 +37,70 @@ export class AdministrativeModulePage {
     readonly successfulUserEditationMessage: Locator;
     readonly successfulUserDeletionMessage: Locator;
     readonly invalidPasswordMessage: Locator;
-    readonly correctButton: Locator
+    readonly correctButton: Locator;
     readonly emptyConfirmationPasswordMessage: Locator;
     readonly existingUserMessage: Locator;
     readonly existingIdentificationMessage: Locator;
+    readonly emptyFieldsValidationMessage: Locator;
+    readonly invalidUsernameFormatMessage: Locator;
+    readonly invalidNamesFormatMessage: Locator;
+    readonly invalidIdentificationNumberFormatMessage: Locator;
+    readonly invalidEmailFormatMessage: Locator;
+    readonly invalidPhoneFormatMessage: Locator;
+    readonly invalidLengthPhoneFormatMessage: Locator;
 
     constructor(page: Page) {
         this.page = page;
-        this.searchUsername = page.locator('#id_Usuario')
-        this.searchFirstnameAndLastname = page.locator('input[name="nombreUser"]')
-        this.emitter = page.locator('select[name="ubicacion"]')
-        this.searchButton = page.getByRole('button', { name: 'Buscar' })
-        this.cleanSearchButton = page.getByRole('button', { name: 'Limpiar' }).first()
-        this.username = page.getByRole('textbox', { name: 'Codigo de Usuario' })
-        this.firstname = page.locator('input[name="nombre1"]')
-        this.middlename = page.locator('input[name="nombre2"]')
-        this.lastname = page.locator('input[name="apellido1"]')
-        this.secondLastname = page.locator('input[name="apellido2"]')
-        this.status = page.locator('select[name="eestatus"]')
-        this.operationalRole = page.locator('select[name="etipo"]')
-        this.transmitter = page.locator('select[name="eubicacion"]')
-        this.charge = page.locator('input[name="cargo"]')
-        this.identificationType = page.locator('select[name="tipo_identificacion"]')
-        this.identificationNumber = page.getByRole('textbox', { name: 'Número de identificación' })
-        this.email = page.getByRole('textbox', { name: 'Direccion de Correo' })
-        this.phoneNumber = page.locator('input[name="telefono"]')
-        this.positionArea = page.getByRole('textbox', { name: 'Area' })
-        this.confirmationPassword = page.getByRole('textbox', { name: 'Clave de confirmacion' })
-        this.insertButton = page.getByRole('button', { name: 'Insertar' })
-        this.confirmCreationButton = page.getByRole('button', { name: 'SI' })
-        this.updateButton = page.getByRole('button', { name: 'Actualizar' })
-        this.cleanCreationButton = page.getByRole('button', { name: 'Limpiar' }).nth(1)
-        this.editUserButton = page.locator("input[type = 'button'][value = 'M']")
-        this.deleteUserButton = page.locator("input[type = 'button'][value = 'E']")
-        this.resetPasswordUserButton = page.locator("input[type = 'button'][value = 'R']")
-        this.successfulUserCreationMessage = page.getByText('tu transacci?n ha sido') //tu transacci?n ha sido procesada exitosamente.
-        this.successfulUserEditationMessage = page.getByText('tu transacci�n ha sido') //tu transacci�n ha sido procesada exitosamente.
-        this.successfulUserDeletionMessage = page.getByText('usuario: ANONIMO02 eliminado exitosamente.')
-        this.invalidPasswordMessage = page.getByText('La contrase&ntilde;a')
-        this.correctButton = page.getByRole('button', { name: 'Corregir' })
-        this.emptyConfirmationPasswordMessage = page.getByText('Debe ingresar su clave de') //Debe ingresar su clave de confirmación primero. 
-        this.existingUserMessage = page.getByText('ya existe un usuario') //ya existe un usuario registrado con el mismo nombre: ANONIMO01.
-        this.existingIdentificationMessage = page.getByText('el nro. de identificaci�n') // el nro. de identificaci�n 1103646335. Ya se encuentra registrado
+        this.searchUsername = page.locator('#id_Usuario');
+        this.searchFirstnameAndLastname = page.locator('input[name="nombreUser"]');
+        this.emitter = page.locator('select[name="ubicacion"]');
+        this.searchButton = page.getByRole('button', { name: 'Buscar' });
+        this.cleanSearchButton = page.getByRole('button', { name: 'Limpiar' }).first();
+        this.username = page.getByRole('textbox', { name: 'Codigo de Usuario' });
+        this.firstname = page.locator('input[name="nombre1"]');
+        this.middlename = page.locator('input[name="nombre2"]');
+        this.lastname = page.locator('input[name="apellido1"]');
+        this.secondLastname = page.locator('input[name="apellido2"]');
+        this.status = page.locator('select[name="eestatus"]');
+        this.operationalRole = page.locator('select[name="etipo"]');
+        this.transmitter = page.locator('select[name="eubicacion"]');
+        this.charge = page.locator('input[name="cargo"]');
+        this.identificationType = page.locator('select[name="tipo_identificacion"]');
+        this.identificationNumber = page.getByRole('textbox', { name: 'Número de identificación' });
+        this.email = page.getByRole('textbox', { name: 'Direccion de Correo' });
+        this.phoneNumber = page.locator('input[name="telefono"]');
+        this.positionArea = page.getByRole('textbox', { name: 'Area' });
+        this.confirmationPassword = page.getByRole('textbox', { name: 'Clave de confirmacion' });
+        this.insertButton = page.getByRole('button', { name: 'Insertar' });
+        this.confirmCreationButton = page.getByRole('button', { name: 'SI' });
+        this.updateButton = page.getByRole('button', { name: 'Actualizar' });
+        this.cleanCreationButton = page.getByRole('button', { name: 'Limpiar' }).nth(1);
+        this.editUserButton = page.locator("input[type = 'button'][value = 'M']");
+        this.deleteUserButton = page.locator("input[type = 'button'][value = 'E']");
+        this.resetPasswordUserButton = page.locator("input[type = 'button'][value = 'R']");
+        this.successfulUserCreationMessage = page.getByText('tu transacci?n ha sido'); //tu transacci?n ha sido procesada exitosamente.
+        this.successfulUserEditationMessage = page.getByText('tu transacci�n ha sido'); //tu transacci�n ha sido procesada exitosamente.
+        this.successfulUserDeletionMessage = page.getByText('usuario: ANONIMO02 eliminado exitosamente.');
+        this.invalidPasswordMessage = page.getByText('La contrase&ntilde;a');
+        this.correctButton = page.getByRole('button', { name: 'Corregir' });
+        this.emptyConfirmationPasswordMessage = page.getByText('Debe ingresar su clave de'); //Debe ingresar su clave de confirmación primero.
+        this.existingUserMessage = page.getByText('ya existe un usuario'); //ya existe un usuario registrado con el mismo nombre: ANONIMO01.
+        this.existingIdentificationMessage = page.getByText('el nro. de identificaci�n'); // el nro. de identificaci�n 1103646335. Ya se encuentra registrado
+        this.emptyFieldsValidationMessage = page.getByText('El campo Usuario está vacío.');
+        this.invalidNamesFormatMessage = page.getByText('Campo Primer nombre es invá');
+        this.invalidIdentificationNumberFormatMessage = page.getByText('Campo Identificación inválido.');
+        this.invalidEmailFormatMessage = page.getByText('Campo Email es inválido.');
+        this.invalidPhoneFormatMessage = page.getByText('Campo Número telefónico invá')
+        this.invalidUsernameFormatMessage = page.getByText('El nombre de usuario debe ser')
+        this.invalidLengthPhoneFormatMessage = page.getByText('Longitud no permitida en')
     }
 
     async searchUser(username: string) {
-        await this.searchUsername.fill(username)
+        await this.searchUsername.fill(username);
     }
 
     async clickOnSearchButton() {
-        await this.searchButton.click()
+        await this.searchButton.click();
     }
 
     async inputUserName(username: string) {
@@ -227,5 +241,38 @@ export class AdministrativeModulePage {
 
     async clickOnUpdateButton() {
         await this.updateButton.click();
+    }
+
+    async validateEmptyFieldsValidationMessage(message: string) {
+        await expect(this.emptyFieldsValidationMessage).toHaveText(message);
+    }
+
+    async validateInvalidUsernameFormatMessage(message: string) {
+        await expect(this.invalidUsernameFormatMessage).toHaveText(message);
+    }
+
+    async validateInvalidFormatOnNamesFieldsMessage(message: string) {
+        await expect(this.invalidNamesFormatMessage).toHaveText(message);
+
+    }
+
+    async validateInvalidIdentificationNumberMessage(message: string) {
+        await expect(this.invalidIdentificationNumberFormatMessage).toHaveText(message);
+
+    }
+
+    async validateInvalidEmailFormatMessage(message: string) {
+        await expect(this.invalidEmailFormatMessage).toHaveText(message);
+
+    }
+
+    async validateInvalidPhoneFormatMessage(message: string) {
+        await expect(this.invalidPhoneFormatMessage).toHaveText(message);
+
+    }
+
+    async validateInvalidLengthPhoneFormatMessage(message: string) {
+        await expect(this.invalidLengthPhoneFormatMessage).toHaveText(message);
+
     }
 }

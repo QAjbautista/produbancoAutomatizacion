@@ -1,7 +1,6 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 
 export class ChangePasswordPage {
-    //Nombre de los locators
     readonly page: Page;
     static create(page: Page) {
         return new ChangePasswordPage(page);
@@ -16,7 +15,6 @@ export class ChangePasswordPage {
     readonly invalidCurrentPasswordMessage: Locator;
 
     constructor(page: Page) {
-        //Webelements de la pagina
         this.page = page;
         this.currentPassword = page.locator('#curpw');
         this.newPassword = page.locator('#newpw');
@@ -26,7 +24,6 @@ export class ChangePasswordPage {
         this.confirmChangePassword = page.getByRole('button', { name: 'SI' })
     }
 
-    //funciones de los elementos
     async setCurrentPassword(currentPassword: string) {
         await this.currentPassword.fill(currentPassword);
     }
@@ -58,14 +55,6 @@ export class ChangePasswordPage {
     async validateAcceptButtonDisabled() {
         await expect(this.acceptButton).toBeDisabled();
     }
-
-
-
-
-
-
-
-
 }
 
 

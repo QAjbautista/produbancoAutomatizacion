@@ -22,13 +22,6 @@ test.describe('Validate create new administrative user', () => {
     });
 
     test.afterEach(async ({ page }) => {
-        // Eliminar el usuario creado para limpiar el entorno
-        await administrativeModulePage.searchUser("anonimo02");
-        await administrativeModulePage.clickOnSearchButton();
-        await administrativeModulePage.inputConfirmationPassword('123');
-        await administrativeModulePage.clickOnDeleteUserButton();
-        await administrativeModulePage.clickConfirmCreationButton();
-        await administrativeModulePage.validateSuccessfulUserDeletionMessage('usuario: ANONIMO02 eliminado exitosamente.');
         // Cerrar sesión
         await homePage.clickOnUsersTab();
         await homePage.clickOnLogoutButton();
@@ -54,11 +47,14 @@ test.describe('Validate create new administrative user', () => {
         await administrativeModulePage.inputIdentificationNumber('2087654329');
         await administrativeModulePage.inputEmail('anonimo02@yopmail.com');
         await administrativeModulePage.inputPositionArea('QA');
-        await administrativeModulePage.inputPhoneNumber('0987654321');
-        await administrativeModulePage.inputConfirmationPassword('123');
+        await administrativeModulePage.inputPhoneNumber('holamundoo');
         await administrativeModulePage.clickInsertButton();
-        await administrativeModulePage.clickConfirmCreationButton();
-        await administrativeModulePage.validateSuccessfulUserCreationMessage('tu transacci?n ha sido procesada exitosamente.');
+        await administrativeModulePage.validateInvalidPhoneFormatMessage('Campo Número telefónico inválido.')
+        await administrativeModulePage.clickOnCorrectButton();
 
+        await administrativeModulePage.inputPhoneNumber('holamundo');
+        await administrativeModulePage.clickInsertButton();
+        await administrativeModulePage.validateInvalidLengthPhoneFormatMessage('Longitud no permitida en campo Número telefónico.')
+        await administrativeModulePage.clickOnCorrectButton();
     });
 });

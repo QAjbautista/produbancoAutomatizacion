@@ -1,58 +1,58 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from "../../PageObjects/Login/LoginPage";
 import { HomePage } from "../../PageObjects/Home/HomePage";
-import { AdministrativeModulePage } from "../../PageObjects/AdministrativeModule/AdministrativeModulePage"
+import { AdministrativeModulePage } from "../../PageObjects/AdministrativeModule/AdministrativeModulePage";
+import users from '../../data/credentials.json';
 
-test.describe('Validate enter invalid confirmation password message', () => {
-    test('User enters correct credentials and logs in to his account', async ({ page }) => {
-        await test.step('I navigate to Produbanco´s administrative module page', async () => {
-            await page.goto(LoginPage.LOGIN_URL);
-        })
-        await test.step('Enter valid username and password to log into the system.', async () => {
-            const loginPage = new LoginPage(page);
+test.describe('Validate error when sending invalid confirmation password', () => {
+    let loginPage: LoginPage;
+    let homePage: HomePage;
+    let administrativeModulePage: AdministrativeModulePage;
 
-            await loginPage.inputUsername('JBAU89');
-            await loginPage.inputPassword('123');
-            await loginPage.clickLoginButton();
-        })
+    test.beforeEach(async ({ page }) => {
+        loginPage = new LoginPage(page);
+        homePage = new HomePage(page);
+        administrativeModulePage = new AdministrativeModulePage(page);
 
-        await test.step('Valid that you have logged in to the portal in a satisfactory manner', async () => {
-            await expect(page).toHaveURL(LoginPage.DASHBOARD_URL);
-        });
+        await page.goto(LoginPage.LOGIN_URL);
+        await loginPage.inputUsername(users.admin1.username);
+        await loginPage.inputPassword(users.admin1.password);
+        await loginPage.clickLoginButton();
+        await expect(page).toHaveURL(LoginPage.DASHBOARD_URL);
+    });
 
-        await test.step('Enter invalid confirmation password to validate message error', async () => {
-            const administrativeModulePage = new AdministrativeModulePage(page);
-            const homePage = new HomePage(page)
-            await homePage.clickOnMaintenanceTab();
-            await homePage.clickOnMaintenanceUsersTab();
-            await homePage.clickOnAdministrativeModule();
-            await expect(page).toHaveURL(AdministrativeModulePage.ADMINISTRATIVEMODULE_URL);
-            await administrativeModulePage.inputUserName('anonimo02');
-            await administrativeModulePage.inputFirstname('Jesus');
-            await administrativeModulePage.inputMiddlename('M.');
-            await administrativeModulePage.inputLastname('Bautista');
-            await administrativeModulePage.inputSecondLastname('D.');
-            await administrativeModulePage.selectStatus('A:Activo');
-            await administrativeModulePage.selectOperationalRole('Usuario');
-            await administrativeModulePage.selectTransmitter('NOVOPAYMENT');
-            await administrativeModulePage.inputCharge('Analista Junior QA');
-            await administrativeModulePage.selectIdentificationType('CC');
-            await administrativeModulePage.inputIdentificationNumber('2087654329');
-            await administrativeModulePage.inputEmail('anonimo02@yopmail.com');
-            await administrativeModulePage.inputPositionArea('QA');
-            await administrativeModulePage.inputPhoneNumber('0987654321');
-            await administrativeModulePage.inputConfirmationPassword('Holamundo1');
-            await administrativeModulePage.clickInsertButton();
-            await administrativeModulePage.validateInvalidPasswordMessage('La contrase&ntilde;a ingresada es incorrecta.');
-            await administrativeModulePage.clickOnCorrectButton();
+    test.afterEach(async ({ page }) => {
+        await homePage.clickOnUsersTab();
+        await homePage.clickOnLogoutButton();
+        await expect(page).toHaveURL(LoginPage.LOGIN_URL);
+    });
 
-        })
+    test('User tries to create a user with an invalid confirmation password', async ({ page }) => {
+        await homePage.clickOnMaintenanceTab();
+        await homePage.clickOnMaintenanceUsersTab();
+        await homePage.clickOnAdministrativeModule();
+        await expect(page).toHaveURL(AdministrativeModulePage.ADMINISTRATIVEMODULE_URL);
 
-        await test.step('Validate log out of the system', async () => {
-            const homePage = new HomePage(page);
-            await homePage.clickOnUsersTab();
-            await homePage.clickOnLogoutButton();
-            await expect(page).toHaveURL(LoginPage.LOGIN_URL);
-        })
+        // Llenar el formulario de usuario
+        await administrativeModulePage.inputUserName('anonimo02');
+        await administrativeModulePage.inputFirstname('Jesus');
+        await administrativeModulePage.inputMiddlename('M.');
+        await administrativeModulePage.inputLastname('Bautista');
+        await administrativeModulePage.inputSecondLastname('D.');
+        await administrativeModulePage.selectStatus('A:Activo');
+        await administrativeModulePage.selectOperationalRole('Usuario');
+        await administrativeModulePage.selectTransmitter('NOVOPAYMENT');
+        await administrativeModulePage.inputCharge('Analista Senior QA');
+        await administrativeModulePage.selectIdentificationType('CC');
+        await administrativeModulePage.inputIdentificationNumber('2087654329');
+        await administrativeModulePage.inputEmail('anonimo02@yopmail.com');
+        await administrativeModulePage.inputPositionArea('QA');
+        await administrativeModulePage.inputPhoneNumber('0987654321');
+        // Aquí se envía una contraseña de confirmación inválida
+        await administrativeModulePage.inputConfirmationPassword('Holamundo1');
+        await administrativeModulePage.clickInsertButton();
+        // Validar el mensaje de error esperado
+        await administrativeModulePage.validateInvalidPasswordMessage('La contrase&ntilde;a ingresada es incorrecta.');
+        await administrativeModulePage.clickOnCorrectButton();
     });
 });

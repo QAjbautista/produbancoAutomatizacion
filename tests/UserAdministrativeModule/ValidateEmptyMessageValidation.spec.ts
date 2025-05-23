@@ -4,7 +4,7 @@ import { HomePage } from "../../PageObjects/Home/HomePage";
 import { AdministrativeModulePage } from "../../PageObjects/AdministrativeModule/AdministrativeModulePage";
 import users from '../../data/credentials.json';
 
-test.describe('Validate don`t enter confirmation password message', () => {
+test.describe('Validate create new administrative user', () => {
     let loginPage: LoginPage;
     let homePage: HomePage;
     let administrativeModulePage: AdministrativeModulePage;
@@ -22,33 +22,21 @@ test.describe('Validate don`t enter confirmation password message', () => {
     });
 
     test.afterEach(async ({ page }) => {
+        // Cerrar sesión
         await homePage.clickOnUsersTab();
         await homePage.clickOnLogoutButton();
         await expect(page).toHaveURL(LoginPage.LOGIN_URL);
     });
 
-    test('User tries to create a user without confirmation password and sees error message', async ({ page }) => {
+    test('User creates and deletes a new administrative user', async ({ page }) => {
         await homePage.clickOnMaintenanceTab();
         await homePage.clickOnMaintenanceUsersTab();
         await homePage.clickOnAdministrativeModule();
         await expect(page).toHaveURL(AdministrativeModulePage.ADMINISTRATIVEMODULE_URL);
 
-        await administrativeModulePage.inputUserName('anonimo02');
-        await administrativeModulePage.inputFirstname('Jesus');
-        await administrativeModulePage.inputMiddlename('M.');
-        await administrativeModulePage.inputLastname('Bautista');
-        await administrativeModulePage.inputSecondLastname('D.');
-        await administrativeModulePage.selectStatus('A:Activo');
-        await administrativeModulePage.selectOperationalRole('Usuario');
-        await administrativeModulePage.selectTransmitter('NOVOPAYMENT');
-        await administrativeModulePage.inputCharge('Analista Junior QA');
-        await administrativeModulePage.selectIdentificationType('CC');
-        await administrativeModulePage.inputIdentificationNumber('2087654329');
-        await administrativeModulePage.inputEmail('anonimo02@yopmail.com');
-        await administrativeModulePage.inputPositionArea('QA');
-        await administrativeModulePage.inputPhoneNumber('0987654321');
         await administrativeModulePage.clickInsertButton();
-        await administrativeModulePage.validateEmptyConfirmationPasswordMessage('Debe ingresar su clave de confirmación primero.');
+        await administrativeModulePage.validateEmptyFieldsValidationMessage('El campo Usuario está vacío. Campo Primer nombre está vacío. Campo Primer apellido está vacío. El campo Rol operativo está vacío. El campo Tipo identificación está vacío. El campo Estatus está vacío. El campo Número identificación está vacío. Campo Email está vacío. El campo Número telefónico está vacío.')
         await administrativeModulePage.clickOnCorrectButton();
+
     });
 });

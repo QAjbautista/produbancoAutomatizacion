@@ -4,7 +4,7 @@ import { HomePage } from "../../PageObjects/Home/HomePage";
 import { AdministrativeModulePage } from "../../PageObjects/AdministrativeModule/AdministrativeModulePage";
 import users from '../../data/credentials.json';
 
-test.describe('Validate search user', () => {
+test.describe('Validate create new administrative user', () => {
     let loginPage: LoginPage;
     let homePage: HomePage;
     let administrativeModulePage: AdministrativeModulePage;
@@ -22,59 +22,35 @@ test.describe('Validate search user', () => {
     });
 
     test.afterEach(async ({ page }) => {
-        // Eliminar usuario
-        await administrativeModulePage.inputConfirmationPassword('123');
-        await administrativeModulePage.clickOnDeleteUserButton();
-        await administrativeModulePage.clickConfirmCreationButton();
-        await administrativeModulePage.validateSuccessfulUserDeletionMessage('usuario: ANONIMO02 eliminado exitosamente.');
         // Cerrar sesión
         await homePage.clickOnUsersTab();
         await homePage.clickOnLogoutButton();
         await expect(page).toHaveURL(LoginPage.LOGIN_URL);
     });
 
-    test('User creates, searches and deletes a user', async ({ page }) => {
+    test('User creates and deletes a new administrative user', async ({ page }) => {
         await homePage.clickOnMaintenanceTab();
         await homePage.clickOnMaintenanceUsersTab();
         await homePage.clickOnAdministrativeModule();
         await expect(page).toHaveURL(AdministrativeModulePage.ADMINISTRATIVEMODULE_URL);
 
-        // Crear usuario
         await administrativeModulePage.inputUserName('anonimo02');
-        await administrativeModulePage.inputFirstname('Jesus');
-        await administrativeModulePage.inputMiddlename('M.');
-        await administrativeModulePage.inputLastname('Bautista');
-        await administrativeModulePage.inputSecondLastname('D.');
+        await administrativeModulePage.inputFirstname('123465-*+');
+        await administrativeModulePage.inputMiddlename('984484*-*5');
+        await administrativeModulePage.inputLastname('989848/*-+');
+        await administrativeModulePage.inputSecondLastname('4654+-*/');
         await administrativeModulePage.selectStatus('A:Activo');
         await administrativeModulePage.selectOperationalRole('Usuario');
         await administrativeModulePage.selectTransmitter('NOVOPAYMENT');
-        await administrativeModulePage.inputCharge('Analista Senior QA');
+        await administrativeModulePage.inputCharge('4654+-*/');
         await administrativeModulePage.selectIdentificationType('CC');
         await administrativeModulePage.inputIdentificationNumber('2087654329');
         await administrativeModulePage.inputEmail('anonimo02@yopmail.com');
-        await administrativeModulePage.inputPositionArea('QA');
+        await administrativeModulePage.inputPositionArea('4654+-*/');
         await administrativeModulePage.inputPhoneNumber('0987654321');
-        await administrativeModulePage.inputConfirmationPassword('123');
         await administrativeModulePage.clickInsertButton();
-        await administrativeModulePage.clickConfirmCreationButton();
-        await administrativeModulePage.validateSuccessfulUserCreationMessage('tu transacci?n ha sido procesada exitosamente.');
+        await administrativeModulePage.validateInvalidFormatOnNamesFieldsMessage('Campo Primer nombre es inválido. Campo Segundo nombre es inválido. Campo Primer apellido es inválido. Campo Segundo apellido es inválido. Campo �rea del cargo inválido. Campo cargo inválido.')
+        await administrativeModulePage.clickOnCorrectButton();
 
-        // Buscar usuario
-        await administrativeModulePage.searchUser("anonimo02");
-        await administrativeModulePage.clickOnSearchButton();
-
-        await administrativeModulePage.validateTableRow([
-            "ANONIMO02",
-            "Jesus",
-            "Bautista",
-            "2087654329",
-            "A",
-            "U",
-            "NOVOPAYMENT",
-            "QA",
-            "Analista Senior QA",
-            "0987654321",
-            "CC"
-        ]);
     });
 });
