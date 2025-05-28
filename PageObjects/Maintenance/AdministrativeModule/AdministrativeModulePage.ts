@@ -1,6 +1,7 @@
 import test, { type Locator, type Page, expect } from "@playwright/test";
 
 export class AdministrativeModulePage {
+
     readonly page: Page;
     static create(page: Page) {
         return new AdministrativeModulePage(page);

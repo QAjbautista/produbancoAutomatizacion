@@ -1,4 +1,4 @@
-import { AdministrativeModulePage } from "../../PageObjects/AdministrativeModule/AdministrativeModulePage"
+import { AdministrativeModulePage } from "../../PageObjects/Maintenance/AdministrativeModule/AdministrativeModulePage";
 import { LoginPage } from "../../PageObjects/Login/LoginPage";
 import { HomePage } from "../../PageObjects/Home/HomePage";
 import users from '../../setup/credentials.json';

@@ -13,6 +13,7 @@ export class HomePage {
     readonly administrativeModuleTab: Locator
     readonly maintenanceTab: Locator
     readonly maintenanceUsersTab: Locator
+    readonly onlineCompaniesTab: Locator;
 
     constructor(page: Page) {
         //Webelements de la pagina
@@ -23,6 +24,7 @@ export class HomePage {
         this.maintenanceTab = page.locator('a').filter({ hasText: /^Mantenimiento$/ })
         this.maintenanceUsersTab = page.getByText('Usuarios Empresas Online Mó') //validar este locator mañana
         this.administrativeModuleTab = page.getByRole('link', { name: 'Módulos Administrativos' })
+        this.onlineCompaniesTab = page.getByRole('link', { name: 'Empresas Online»' })
 
     }
 
@@ -49,6 +51,10 @@ export class HomePage {
 
     async clickOnAdministrativeModule() {
         await this.administrativeModuleTab.click();
+    }
+
+    async clickOnOnlineCompaniesTab() {
+        await this.onlineCompaniesTab.click();
     }
 }
 
