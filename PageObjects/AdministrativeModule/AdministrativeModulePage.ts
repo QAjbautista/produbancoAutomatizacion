@@ -48,6 +48,7 @@ export class AdministrativeModulePage {
     readonly invalidEmailFormatMessage: Locator;
     readonly invalidPhoneFormatMessage: Locator;
     readonly invalidLengthPhoneFormatMessage: Locator;
+    readonly invalidIdentificacionNumberMessage: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -93,6 +94,7 @@ export class AdministrativeModulePage {
         this.invalidPhoneFormatMessage = page.getByText('Campo Número telefónico invá')
         this.invalidUsernameFormatMessage = page.getByText('El nombre de usuario debe ser')
         this.invalidLengthPhoneFormatMessage = page.getByText('Longitud no permitida en')
+        this.invalidIdentificacionNumberMessage = page.getByText('el n�mero de identificaci�n')
     }
 
     async searchUser(username: string) {
@@ -274,5 +276,9 @@ export class AdministrativeModulePage {
     async validateInvalidLengthPhoneFormatMessage(message: string) {
         await expect(this.invalidLengthPhoneFormatMessage).toHaveText(message);
 
+    }
+
+    async validateInvalidIdentificacionNumberMessage(message: string) {
+        await expect(this.invalidIdentificacionNumberMessage).toHaveText(message);
     }
 }
