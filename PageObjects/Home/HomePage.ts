@@ -28,7 +28,7 @@ export class HomePage {
 
     //funciones de los elementos
     async clickOnUsersTab() {
-        await this.usersTab.click();
+        await this.usersTab.hover();
     }
 
     async clickOnLogoutButton() {
@@ -40,7 +40,7 @@ export class HomePage {
     }
 
     async clickOnMaintenanceTab() {
-        await this.maintenanceTab.click();
+        await this.maintenanceTab.hover();
     }
 
     async clickOnMaintenanceUsersTab() {

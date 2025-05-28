@@ -1,8 +1,9 @@
-import { test, expect } from '@playwright/test';
+import { AdministrativeModulePage } from "../../PageObjects/AdministrativeModule/AdministrativeModulePage";
 import { LoginPage } from "../../PageObjects/Login/LoginPage";
 import { HomePage } from "../../PageObjects/Home/HomePage";
-import { AdministrativeModulePage } from "../../PageObjects/AdministrativeModule/AdministrativeModulePage";
-import users from '../../data/credentials.json';
+import users from '../../setup/credentials.json';
+import { test, expect } from '@playwright/test';
+
 
 test.describe('Validate create new administrative user', () => {
     let loginPage: LoginPage;
@@ -14,14 +15,14 @@ test.describe('Validate create new administrative user', () => {
         homePage = new HomePage(page);
         administrativeModulePage = new AdministrativeModulePage(page);
 
-        await page.goto('/admnovoWebProd/loginSetup.do?trnid=login&opcion=3');
-        await loginPage.inputUsername(users.admin1.username);
-        await loginPage.inputPassword(users.admin1.password);
+        await page.goto(LoginPage.LOGIN_PATH);
+        await loginPage.inputUsername(users.admin3.username);
+        await loginPage.inputPassword(users.globalPassword.password);
         await loginPage.clickLoginButton();
         await expect(page).toHaveURL(LoginPage.DASHBOARD_URL);
     });
 
-    test.afterEach(async ({ page }) => {
+    test.afterEach(async ({ page }, testInfo) => {
         // Eliminar el usuario creado para limpiar el entorno
         await administrativeModulePage.searchUser("anonimo02");
         await administrativeModulePage.clickOnSearchButton();

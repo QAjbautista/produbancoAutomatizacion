@@ -35,7 +35,7 @@ export class AdministrativeModulePage {
     readonly resetPasswordUserButton: Locator;
     readonly successfulUserCreationMessage: Locator;
     readonly successfulUserEditationMessage: Locator;
-    readonly successfulUserDeletionMessage: Locator;
+    readonly successfulUserDeletionMessage: (username: string) => Locator;
     readonly invalidPasswordMessage: Locator;
     readonly correctButton: Locator;
     readonly emptyConfirmationPasswordMessage: Locator;
@@ -80,7 +80,7 @@ export class AdministrativeModulePage {
         this.resetPasswordUserButton = page.locator("input[type = 'button'][value = 'R']");
         this.successfulUserCreationMessage = page.getByText('tu transacci?n ha sido'); //tu transacci?n ha sido procesada exitosamente.
         this.successfulUserEditationMessage = page.getByText('tu transacci�n ha sido'); //tu transacci�n ha sido procesada exitosamente.
-        this.successfulUserDeletionMessage = page.getByText('usuario: ANONIMO02 eliminado exitosamente.');
+        this.successfulUserDeletionMessage = (message: string) => this.page.getByText(new RegExp(message));
         this.invalidPasswordMessage = page.getByText('La contrase&ntilde;a');
         this.correctButton = page.getByRole('button', { name: 'Corregir' });
         this.emptyConfirmationPasswordMessage = page.getByText('Debe ingresar su clave de'); //Debe ingresar su clave de confirmación primero.
@@ -184,7 +184,7 @@ export class AdministrativeModulePage {
     }
 
     async validateSuccessfulUserDeletionMessage(message: string) {
-        await expect(this.successfulUserDeletionMessage).toHaveText(message);
+        await expect(this.successfulUserDeletionMessage(message)).toBeVisible();
     }
 
     async validateInvalidPasswordMessage(message: string) {

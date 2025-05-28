@@ -1,8 +1,8 @@
-import { test, expect } from '@playwright/test';
+import { AdministrativeModulePage } from "../../PageObjects/AdministrativeModule/AdministrativeModulePage"
 import { LoginPage } from "../../PageObjects/Login/LoginPage";
 import { HomePage } from "../../PageObjects/Home/HomePage";
-import { AdministrativeModulePage } from "../../PageObjects/AdministrativeModule/AdministrativeModulePage"
-import users from '../../data/credentials.json';
+import users from '../../setup/credentials.json';
+import { test, expect } from '@playwright/test';
 
 test.describe('Validate response when editing a user', () => {
     let loginPage: LoginPage;
@@ -14,21 +14,21 @@ test.describe('Validate response when editing a user', () => {
         homePage = HomePage.create(page);
         administrativeModulePage = AdministrativeModulePage.create(page);
 
-        await page.goto('/admnovoWebProd/loginSetup.do?trnid=login&opcion=3');
-        await loginPage.inputUsername(users.admin1.username);
-        await loginPage.inputPassword(users.admin1.password);
+        await page.goto(LoginPage.LOGIN_PATH);
+        await loginPage.inputUsername(users.admin7.username);
+        await loginPage.inputPassword(users.globalPassword.password);
         await loginPage.clickLoginButton();
         await expect(page).toHaveURL(LoginPage.DASHBOARD_URL);
     });
 
     test.afterEach(async ({ page }) => {
         // Eliminar el usuario creado para limpiar el entorno
-        await administrativeModulePage.searchUser("anonimo02");
+        await administrativeModulePage.searchUser("anonimo06");
         await administrativeModulePage.clickOnSearchButton();
         await administrativeModulePage.inputConfirmationPassword('123');
         await administrativeModulePage.clickOnDeleteUserButton();
         await administrativeModulePage.clickConfirmCreationButton();
-        await administrativeModulePage.validateSuccessfulUserDeletionMessage('usuario: ANONIMO02 eliminado exitosamente.');
+        await administrativeModulePage.validateSuccessfulUserDeletionMessage('usuario: ANONIMO06 eliminado exitosamente.');
         // Cerrar sesión
         await homePage.clickOnUsersTab();
         await homePage.clickOnLogoutButton();
@@ -41,7 +41,7 @@ test.describe('Validate response when editing a user', () => {
         await homePage.clickOnAdministrativeModule();
         await expect(page).toHaveURL(AdministrativeModulePage.ADMINISTRATIVEMODULE_URL);
 
-        await administrativeModulePage.inputUserName('anonimo02');
+        await administrativeModulePage.inputUserName('anonimo06');
         await administrativeModulePage.inputFirstname('Jesus');
         await administrativeModulePage.inputMiddlename('M.');
         await administrativeModulePage.inputLastname('Bautista');
@@ -51,8 +51,8 @@ test.describe('Validate response when editing a user', () => {
         await administrativeModulePage.selectTransmitter('NOVOPAYMENT');
         await administrativeModulePage.inputCharge('Analista Junior QA');
         await administrativeModulePage.selectIdentificationType('CC');
-        await administrativeModulePage.inputIdentificationNumber('2087654329');
-        await administrativeModulePage.inputEmail('anonimo02@yopmail.com');
+        await administrativeModulePage.inputIdentificationNumber('0998048409');
+        await administrativeModulePage.inputEmail('anonimo06@yopmail.com');
         await administrativeModulePage.inputPositionArea('QA');
         await administrativeModulePage.inputPhoneNumber('0987654321');
         await administrativeModulePage.inputConfirmationPassword('123');
@@ -60,14 +60,14 @@ test.describe('Validate response when editing a user', () => {
         await administrativeModulePage.clickConfirmCreationButton();
         await administrativeModulePage.validateSuccessfulUserCreationMessage('tu transacci?n ha sido procesada exitosamente.')
 
-        await administrativeModulePage.searchUser("anonimo02");
+        await administrativeModulePage.searchUser("anonimo06");
         await administrativeModulePage.clickOnSearchButton();
 
         await administrativeModulePage.validateTableRow([
-            "ANONIMO02",
+            "ANONIMO06",
             "Jesus",
             "Bautista",
-            "2087654329",
+            "0998048409",
             "A",
             "U",
             "NOVOPAYMENT",
@@ -84,19 +84,19 @@ test.describe('Validate response when editing a user', () => {
         await administrativeModulePage.inputPositionArea('Contador');
         await administrativeModulePage.inputPhoneNumber('0966789012');
 
-        await administrativeModulePage.searchUser("anonimo02");
+        await administrativeModulePage.searchUser("anonimo06");
         await administrativeModulePage.inputConfirmationPassword('123');
         await administrativeModulePage.clickOnUpdateButton();
         await administrativeModulePage.clickConfirmCreationButton();
         await administrativeModulePage.validateSuccessfulUserEditationMessage('tu transacci�n ha sido procesada exitosamente.')
 
-        await administrativeModulePage.searchUser("anonimo02");
+        await administrativeModulePage.searchUser("anonimo06");
         await administrativeModulePage.clickOnSearchButton();
         await administrativeModulePage.validateTableRow([
-            "ANONIMO02",
+            "ANONIMO06",
             "Carlos",
             "Hernandez",
-            "2087654329",
+            "0998048409",
             "A",
             "U",
             "NOVOPAYMENT",

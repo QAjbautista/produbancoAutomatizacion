@@ -5,6 +5,8 @@ export class LoginPage {
     static create(page: Page) {
         return new LoginPage(page);
     }
+    static LOGIN_PATH =
+        "/admnovoWebProd/loginSetup.do?trnid=login&opcion=3"
     static LOGIN_URL =
         "https://tomcat-t-ecuador-server.novopayment.net/admnovoWebProd/loginSetup.do?trnid=login&opcion=3";
     static DASHBOARD_URL =

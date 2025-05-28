@@ -1,8 +1,8 @@
-import { test, expect } from '@playwright/test';
+import { AdministrativeModulePage } from "../../PageObjects/AdministrativeModule/AdministrativeModulePage";
 import { LoginPage } from "../../PageObjects/Login/LoginPage";
 import { HomePage } from "../../PageObjects/Home/HomePage";
-import { AdministrativeModulePage } from "../../PageObjects/AdministrativeModule/AdministrativeModulePage";
-import users from '../../data/credentials.json';
+import users from '../../setup/credentials.json';
+import { test, expect } from '@playwright/test';
 
 test.describe('Validate don`t enter confirmation password message', () => {
     let loginPage: LoginPage;
@@ -14,9 +14,9 @@ test.describe('Validate don`t enter confirmation password message', () => {
         homePage = new HomePage(page);
         administrativeModulePage = new AdministrativeModulePage(page);
 
-        await page.goto('/admnovoWebProd/loginSetup.do?trnid=login&opcion=3');
-        await loginPage.inputUsername(users.admin1.username);
-        await loginPage.inputPassword(users.admin1.password);
+        await page.goto(LoginPage.LOGIN_PATH);
+        await loginPage.inputUsername(users.admin6.username);
+        await loginPage.inputPassword(users.globalPassword.password);
         await loginPage.clickLoginButton();
         await expect(page).toHaveURL(LoginPage.DASHBOARD_URL);
     });
@@ -33,7 +33,7 @@ test.describe('Validate don`t enter confirmation password message', () => {
         await homePage.clickOnAdministrativeModule();
         await expect(page).toHaveURL(AdministrativeModulePage.ADMINISTRATIVEMODULE_URL);
 
-        await administrativeModulePage.inputUserName('anonimo02');
+        await administrativeModulePage.inputUserName('anonimo05');
         await administrativeModulePage.inputFirstname('Jesus');
         await administrativeModulePage.inputMiddlename('M.');
         await administrativeModulePage.inputLastname('Bautista');
@@ -44,7 +44,7 @@ test.describe('Validate don`t enter confirmation password message', () => {
         await administrativeModulePage.inputCharge('Analista Junior QA');
         await administrativeModulePage.selectIdentificationType('CC');
         await administrativeModulePage.inputIdentificationNumber('2087654329');
-        await administrativeModulePage.inputEmail('anonimo02@yopmail.com');
+        await administrativeModulePage.inputEmail('anonimo05@yopmail.com');
         await administrativeModulePage.inputPositionArea('QA');
         await administrativeModulePage.inputPhoneNumber('0987654321');
         await administrativeModulePage.clickInsertButton();

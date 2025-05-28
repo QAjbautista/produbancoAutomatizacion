@@ -1,8 +1,8 @@
-import { test, expect } from '@playwright/test';
+import { AdministrativeModulePage } from "../../PageObjects/AdministrativeModule/AdministrativeModulePage"
 import { LoginPage } from "../../PageObjects/Login/LoginPage";
 import { HomePage } from "../../PageObjects/Home/HomePage";
-import { AdministrativeModulePage } from "../../PageObjects/AdministrativeModule/AdministrativeModulePage"
-import users from '../../data/credentials.json';
+import users from '../../setup/credentials.json';
+import { test, expect } from '@playwright/test';
 
 test.describe('Validate response when clearing the data entered in the form', () => {
     let loginPage: LoginPage;
@@ -14,9 +14,9 @@ test.describe('Validate response when clearing the data entered in the form', ()
         homePage = HomePage.create(page);
         administrativeModulePage = AdministrativeModulePage.create(page);
 
-        await page.goto('/admnovoWebProd/loginSetup.do?trnid=login&opcion=3');
-        await loginPage.inputUsername(users.admin1.username);
-        await loginPage.inputPassword(users.admin1.password);
+        await page.goto(LoginPage.LOGIN_PATH);
+        await loginPage.inputUsername(users.admin2.username);
+        await loginPage.inputPassword(users.globalPassword.password);
         await loginPage.clickLoginButton();
         await expect(page).toHaveURL(LoginPage.DASHBOARD_URL);
     });
