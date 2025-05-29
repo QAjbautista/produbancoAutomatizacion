@@ -22,9 +22,10 @@ export class HomePage {
         this.logoutTab = page.getByRole('link', { name: 'Salir del Módulo' })
         this.changePasswordTab = page.getByRole('link', { name: 'Cambio de Clave' });
         this.maintenanceTab = page.locator('a').filter({ hasText: /^Mantenimiento$/ })
-        this.maintenanceUsersTab = page.getByText('Usuarios Empresas Online Mó') //validar este locator mañana
+        this.maintenanceUsersTab = page.getByText('Usuarios Empresas Online Mó')
         this.administrativeModuleTab = page.getByRole('link', { name: 'Módulos Administrativos' })
-        this.onlineCompaniesTab = page.getByRole('link', { name: 'Empresas Online»' })
+        this.onlineCompaniesTab = page.getByRole('link', { name: 'Empresas Online', exact: true })
+
 
     }
 

@@ -201,6 +201,7 @@ export class AdministrativeModulePage {
     async validateEmptyConfirmationPasswordMessage(message: string) {
         await expect(this.emptyConfirmationPasswordMessage).toHaveText(message);
     }
+
     async validateTableRow(expectedValues: string[]) {
         for (let i = 0; i < expectedValues.length; i++) {
             const cell = this.page.locator(`//*[@id="cxTable"]/tbody/tr/td[${i + 1}]`);
