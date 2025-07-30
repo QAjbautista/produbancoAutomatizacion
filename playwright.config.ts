@@ -41,7 +41,15 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        headless: false,
+        viewport: null,
+        launchOptions: {
+          args: ['--start-maximized']
+        }
+      }
+      //use: { ...devices['Desktop Chrome'] },
+      //viewport: { width: 2080, height: 768 },
     },
 
     // {

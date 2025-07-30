@@ -47,6 +47,8 @@ export class OnlineCompaniesPage {
 
     readonly confirmCreationButton: Locator;
     readonly confirmCreationMessage: Locator;
+    readonly confirmUpdateMessage: (username: string) => Locator;
+    readonly companyDropdown: Locator;
 
     constructor(page: Page) {
         //Formulario de creacion de usuario
@@ -77,7 +79,7 @@ export class OnlineCompaniesPage {
         //Campos
         this.searchName = page.locator('input[name="acnom1usuario"]');
         this.searchLastName = page.locator('input[name="acape1usuario"]');
-        this.searchIdentificationNumber = page.locator('input[name="acidusuario"]');
+        this.searchIdentificationNumber = page.locator("input[type=text][name='acidusuario']");
         this.searchUsername = page.getByRole('row', { name: 'Identificación: Usuario:', exact: true }).locator('input[name="accodusuario"]');
         this.selectCompanies = page.locator('#B_rif');
 
@@ -86,16 +88,19 @@ export class OnlineCompaniesPage {
         this.cleanSearchButton = page.getByRole('button', { name: 'Limpiar' }).nth(1);
 
         //Tabla de resultados
-        this.selectProfile = page.locator('#cod_perfil'); //selecciona perfil
-        this.selectModule = page.locator('#cod_modulo'); //selecciona modulo
-        this.selectFunction = page.locator('#funciones'); //selecciona funciones
+        this.selectProfile = page.locator('select[id="cod_perfil"]'); //selecciona perfil 
+        this.selectModule = page.locator('select[id="cod_modulo"]'); //selecciona modulo 
+        this.selectFunction = page.locator('select[id="funciones"]'); //selecciona funciones
         this.createProfileButton = page.locator("input[value='Crear Perfil']"); //Boton crear perfil
-        this.deleteProfileButton = page.locator("input[onclick='eliminar(this.form,this)'][type=button][value='E']"); //Boton eliminar perfil
+        this.deleteProfileButton = page.locator("input[onclick='eliminar(this.form,this)'][type='button'][value='E']"); //Boton eliminar perfil
         this.editUserButton = page.locator("input[type=button][value='M']"); //Boton registro usuario
         this.addCompanyButton = page.locator("input[type=button][value='A']"); //Boton agregar empresa
 
         this.confirmCreationButton = page.getByRole('button', { name: 'SI' });
-        this.confirmCreationMessage = page.getByText('tu transaccion ha sido');
+        this.confirmCreationMessage = page.getByText('tu transaccion ha sido procesada exitosamente.');
+
+        this.confirmUpdateMessage = (message: string) => this.page.getByText(new RegExp(message));
+        this.companyDropdown = page.locator('select[name="empresa"]');
     }
 
     async inputUsername(username: string) {
@@ -155,6 +160,7 @@ export class OnlineCompaniesPage {
     }
 
     async inputConfirmationPassword(confirmationPassword: string) {
+        await this.confirmationPassword.scrollIntoViewIfNeeded();
         await this.confirmationPassword.fill(confirmationPassword);
     }
 
@@ -167,7 +173,7 @@ export class OnlineCompaniesPage {
     }
 
     async clickCleanButton() {
-        await this.cleanButton.click();
+        await this.cleanButton.click({ timeout: 10000 });
     }
 
     async inputSearchName(name: string) {
@@ -195,26 +201,46 @@ export class OnlineCompaniesPage {
     }
 
     async clickCleanSearchButton() {
+        await expect(this.cleanSearchButton).toBeEnabled({ timeout: 10000 })
         await this.cleanSearchButton.click();
     }
 
     async selectProfileOption(option: string) {
+        await this.selectFunction.scrollIntoViewIfNeeded()
+        await this.selectProfile.click();
         await this.selectProfile.selectOption(option);
     }
 
     async selectModuleOption(option: string) {
+        await this.selectFunction.scrollIntoViewIfNeeded()
+        await this.selectModule.click();
         await this.selectModule.selectOption(option);
     }
     async selectFunctionOption(option: string) {
+        await this.selectFunction.scrollIntoViewIfNeeded()
+        await this.selectFunction.click();
         await this.selectFunction.selectOption(option);
     }
 
     async clickCreateProfileButton() {
+        await this.selectFunction.scrollIntoViewIfNeeded()
         await this.createProfileButton.click();
     }
 
-    async clickDeleteProfileButton() {
-        await this.deleteProfileButton.click();
+    async clickDeleteProfileButton(password: string) {
+        await this.inputConfirmationPassword(password);
+        await this.deleteProfileButton.first().click();
+        await this.clickConfirmCreationButton()
+    }
+
+    async clickDeleteAllProfiles(password: string) {
+        const selectors = ['#TEBANU', '#TEBELI', '#REPEDO', '#OPCONL'];
+
+        for (const selector of selectors) {
+            await this.inputConfirmationPassword(password);
+            await this.page.locator(selector).click();
+            await this.clickConfirmCreationButton();
+        }
     }
 
     async clickEditUserButton() {
@@ -230,14 +256,67 @@ export class OnlineCompaniesPage {
     }
 
     async validateConfirmCreationMessage(message: string) {
+        await expect(this.page.getByRole('alert')).toContainText('tu transaccion ha sido procesada exitosamente.');
+        await expect(this.confirmCreationMessage).toBeVisible({ timeout: 15000 });
         await expect(this.confirmCreationMessage).toHaveText(message);
     }
 
+    /*async validateTableRow(user: string, fullName: string, email: string, status: string) {
+        // Busca la fila que contiene todas las celdas esperadas
+        await expect(this.page.getByRole('cell', { name: user, exact: true })).toHaveText(user);
+        await expect(this.page.getByRole('cell', { name: fullName, exact: true })).toHaveText(fullName);
+        await expect(this.page.getByRole('cell', { name: email, exact: true })).toHaveText(email);
+        await expect(this.page.getByRole('cell', { name: status, exact: true })).toHaveText(status);
+    }*/
+
     async validateTableRow(user: string, fullName: string, email: string, status: string) {
-        await expect(this.page.getByRole('cell', { name: user, exact: true })).toBeVisible();
-        await expect(this.page.getByRole('cell', { name: fullName, exact: true })).toBeVisible();
-        await expect(this.page.getByRole('cell', { name: email, exact: true })).toBeVisible();
-        await expect(this.page.getByRole('cell', { name: status, exact: true })).toBeVisible();
+        const userCell = this.page.locator(`//td[normalize-space()='${user}']`);
+        const fullNameCell = this.page.locator(`//td[normalize-space()='${fullName}']`);
+        const emailCell = this.page.locator(`//td[normalize-space()='${email}']`);
+        const statusCell = this.page.locator(`//td[normalize-space()='${status}']`);
+
+        await expect(userCell).toBeVisible();
+        await expect(fullNameCell).toBeVisible();
+        await expect(emailCell).toBeVisible();
+        await expect(statusCell).toBeVisible();
+    }
+
+
+    async validateConfirmUpdateMessage(message: string) {
+        await expect(this.confirmUpdateMessage(message)).toBeVisible();
+    }
+
+    async selectCompanyDropdown(companyName: string) {
+        await this.companyDropdown.selectOption(companyName);
+    }
+
+    async validateFormFieldsEmpty() {
+        await expect(this.username).toBeEmpty();
+        await expect(this.phoneNumber).toBeEmpty();
+        await expect(this.identificationType).toHaveValue('');
+        await expect(this.identificationNumber).toBeEmpty();
+        await expect(this.firstName).toBeEmpty();
+        await expect(this.middlename).toBeEmpty();
+        await expect(this.lastname).toBeEmpty();
+        await expect(this.secondLastname).toBeEmpty();
+        await expect(this.charge).toBeEmpty();
+        await expect(this.positionArea).toBeEmpty();
+        await expect(this.email).toBeEmpty();
+        await expect(this.status).toHaveValue('');
+        await expect(this.signatureGroup).toHaveValue('');
+        await expect(this.signatureOrder).toHaveValue('0');
+        await expect(this.confirmationPassword).toBeEmpty();
+    }
+
+    async addProfileToUser(username: string, profileOption: string, moduleOption: string, functionOption: string, password: string) {
+        await this.clickCleanSearchButton();
+        await this.inputSearchUsername(username);
+        await this.selectProfileOption(profileOption);
+        await this.selectModuleOption(moduleOption);
+        await this.selectFunctionOption(functionOption);
+        await this.inputConfirmationPassword(password);
+        await this.clickCreateProfileButton();
+        await this.clickConfirmCreationButton();
     }
 }
 
