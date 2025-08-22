@@ -5,8 +5,6 @@ import users from '../../setup/credentials.json';
 import { test, expect } from '@playwright/test';
 import { RelationshipUserCompanyPage } from '../../PageObjects/Maintenance/OnlineCompanies/RelationshipUserCompanyPage';
 
-
-
 test.describe('Validate add companie to user', () => {
     let loginPage: LoginPage;
     let homePage: HomePage;
@@ -36,7 +34,6 @@ test.describe('Validate add companie to user', () => {
     });
 
     test('User creates a new CEO user and add companie to him', async ({ page }) => {
-
 
         await homePage.clickOnMaintenanceTab();
         await homePage.clickOnMaintenanceUsersTab();
